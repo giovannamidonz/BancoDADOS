@@ -1,0 +1,69 @@
+--CREATE TABLE Empregado ( Mt_Empregado NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 1 PRIMARY KEY, 
+                --         Nome VARCHAR2(50) NOT NULL, 
+                --         Sexo CHAR(1) NOT NULL CHECK(Sexo='M' OR Sexo='F'));
+						
+
+--CREATE TABLE Dependente ( Cd_Dependente NUMBER GENERATED AS IDENTITY START WITH 100 INCREMENT BY 1 PRIMARY KEY, 
+                          --Nome VARCHAR2(50) NOT NULL, 
+                          --Sexo CHAR(1) NOT NULL CHECK(Sexo='M' OR Sexo='F'), 
+                          --Mt_Empregado NUMBER NOT NULL REFERENCES Empregado(Mt_Empregado) ON DELETE CASCADE);
+
+
+
+--INSERT INTO Empregado VALUES ( 1003, 'Carlos', 'carlos@gmail.com' );
+--INSERT INTO Dependente VALUES ( 1004, 'Karla' , 'karla@gamil.com' );
+--INSERT INTO Dependente VALUES ( 1005, 'Jason' , 'Jason@gamil.com' );
+
+--DESCRIBE Empregado;
+--DESCRIBE Dependente;
+
+--USE master;
+--IF DB_ID('Fred')<>0
+  -- DROP DATABASE Fred;
+--CREATE DATABASE Fred;
+--GO
+--USE Fred
+
+    
+CREATE TABLE cadfun (CODFUN  NUMBER    ,
+                     NOME    VARCHAR(40),
+                     DEPTO   VARCHAR(2) ,
+                     FUNCAO  VARCHAR(20),
+                     SALARIO NUMBER(8,2));
+-------------------------------------------------------------------------------   
+INSERT INTO cadfun VALUES (1,  'CARLOS ALBERTO',   '3', 'VENDEDOR'   , 1530.00);
+INSERT INTO cadfun VALUES (2,  'MARCOS HENRIQUE',  '2', 'GERENTE'    , 1985.75);   
+INSERT INTO cadfun VALUES (3,  'APARECIDA SILVA',  '3', 'SECRETARIO' , 1200.50);   
+INSERT INTO cadfun VALUES (4,  'SILVANA PACHECO',  '5', 'SUPERVISOR', 1599.51);   
+INSERT INTO cadfun VALUES (5,  'MARCELO SOUZA',    '3', 'ANALISTA'   , 2250.11);   
+INSERT INTO cadfun VALUES (6,  'MARISILVA NEVES',  '2', 'SECRETARIO' , 1200.50);   
+INSERT INTO cadfun VALUES (7,  'WILSON DE MACEDO', '3', 'PROGRAMADOR', 1050.00);   
+INSERT INTO cadfun VALUES (8,  'AUGUSTO SOUZA',    '3', 'PROGRAMADOR', 1050.00);   
+INSERT INTO cadfun VALUES (9,  'CARLOS BASTOS',    '5', 'VENDEDOR'   , 1530.00);
+INSERT INTO cadfun VALUES (10, 'SILVA SANTOS',     '3', 'SUPERVISOR' , 1599.51);
+INSERT INTO cadfun VALUES (11, 'ANA BASTOS',       '5', 'VENDEDOR'  , 1530.00);   
+INSERT INTO cadfun VALUES (12, 'PAULO DA SILVA',   '2', 'VENDEDOR'   , 1530.00);     
+-------------------------------------------------------------------------------   
+--SELECT * INTO morto FROM cadfun;
+--SELECT nome, salario FROM cadfun; 
+--SELECT nome,depto FROM cadfun WHERE depto = '3';
+
+--SELECT nome,salario FROM cadfun ORDER BY nome ASC;
+--SELECT nome,salario FROM cadfun ORDER BY nome DESC;
+--SELECT nome,salario FROM cadfun ORDER BY nome DESC;
+--SELECT nome,depto FROM cadfun WHERE depto = '3' ORDER BY nome DESC;
+--SELECT * FROM cadfun WHERE codfun = 7;
+--UPDATE cadfun SET salario = 2300.50 WHERE codfun =7;
+--SELECT * FROM cadfun
+--SELECT * FROM cadfun WHERE nome = 'ANA BASTOS' ;
+--UPDATE cadfun SET depto = '3'  WHERE nome = 'ANA BASTOS';
+--UPDATE cadfun SET salario = salario * 110/100 
+--SELECT * FROM cadfun WHERE salario>=2000;
+--SELECT nome FROM cadfun WHERE ' ' || nome || ' ' LIKE '% SILVA %';
+--SELECT nome FROM cadfun WHERE  nome  LIKE 'M%';
+--SELECT * FROM cadfun WHERE funcao ='PROGRAMADOE' OR  funcao ='ANALISTA';
+--SELECT * FROM cadfun WHERE funcao in('PROGRAMADOE','ANALISTA';)
+--SELECT * FROM cadfun WHERE funcao<>'PROGRAMADOR' AND funcao<>'ANALISTA';
+--SELECT * FROM cadfun WHERE funcao NOT IN ('PROGRAMADOR','ANALISTA');
+SELECT * FROM cadfun WHERE salario BETWEEN 1500 and 2000;
+SELECT * FROM cadfun WHERE salario NOT BETWEEN 1500 and 2500;
