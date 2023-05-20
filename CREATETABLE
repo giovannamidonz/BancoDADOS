@@ -1,0 +1,32 @@
+--CREATE TABLE pessoal ( fone VARCHAR2 (11), nome VARCHAR2 (50))
+
+--ALTER TABLE pessoal RENAME TO agenda;
+
+--ALTER TABLE agenda ADD email VARCHAR2(50);
+
+--ALTER TABLE agenda ADD (contato1 VARCHAR2 (50),contato2 VARCHAR2 (50));
+
+--ALTER TABLE agenda RENAME COLUMN email TO e_mail;
+
+--ALTER TABLE agenda MODIFY e_mail VARCHAR2 (100);
+
+--ALTER TABLE agenda MODIFY (contato1 VARCHAR2 (100), contato2 VARCHAR2 (100) );
+
+--ALTER TABLE agenda DROP COLUMN contato2;
+DROP TABLE agenda;
+
+
+DESCRIBE agenda
+
+
+-------------------------------------------------------------------------------------------
+
+--CREATE TABLE colecao (artista VARCHAR2(30),musica VARCHAR2(40));
+
+--AlTER TABLE colecao RENAME TO playlist;
+
+--ALTER TABLE playlist ADD Data DATE;
+--ALTER TABLE playlist ADD obs VARCHAR2(100);
+--ALTER TABLE agenda MODIFY (artista VARCHAR(50), musica VARCHAR(50));
+DESCRIBE playlist
+DROP TABLE playlist
