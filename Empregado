@@ -1,0 +1,34 @@
+CREATE TABLE empregado ( matricula NUMBER, nome VARCHAR2(100), nascimento DATE, sexo CHAR(1), salario NUMBER(8,2));
+// VARCHAR COMPRIMIME NA MEMORIA DIFERENTE DO CHAR QUE GUARGA EXTAMENTE O QUE SE PEDE 
+
+
+
+INSERT INTO empregado (matricula, nome , nascimento,sexo, salario)
+	VALUES(1, 'GIOVANNA',TO_DATE('23/09/1998', 'dd/MM/YYYY'), 'F', 7500);
+// a forma mais rapida e segura para inserir valores. 
+
+INSERT INTO empregado (matricula, nome , nascimento,sexo, salario) VALUES(2, 'HUGO',TO_DATE('05/04/1987', 'DD/MM/YYYY'), 'M', 9000.00)
+INSERT INTO empregado (matricula, nome , nascimento,sexo, salario) VALUES(3, 'DELGADO',TO_DATE('13/04/2000', 'DD/MM/YYYY'), 'M', 7500.00)
+
+
+
+UPDATE empregado SET salario=salario*1.1 WHERE sexo = 'F';
+
+DELETE FROM empregado WHERE salario<4000;
+SELECT * FROM empregado;
+
+EXERICICIO 01 
+
+CREATE TABLE cadfun (codfun NUMBER, nome VARCHAR(40), depto CHAR(2), funcao VARCHAR(20), salario NUMBER(10,2));
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(1,'CARLOS ALBERTO',3, 'VENDEDOR',1530.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(2,'MARCOS HENRIQUE',2, 'GERENTE',1985.75)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(3,'APARECIDA SILVA',3, 'SECRETARIO',1200.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(4,'SILVANA PACHECO',5, 'SUPERVISOR',1599.51)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(5,'MARCELO SOUZA',3, 'ANALISTA',2250.11)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(6,'MARISILVA NEVES',2, 'SECRETARIO',1200.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(7,'WILSON DE MACEDO',3, 'PROGRAMADOR',1050.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(8,'AUGUSTO SOUZA',3, 'PROGRAMADOR',1050.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(9,'CARLOS BASTOS',5, 'VENDEDOR',1530.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(10,'SILVA SANTOS',3, 'SUPERVISOR',1599.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(11,'ANA BASTOS',5, 'VENDEDOR',1530.00)
+INSERT INTO cadfun (codgun, nome, depto, funcao,salrio) VALUES(12,'PAULO DA SILVA',2, 'VENDEDOR',1530.00)
