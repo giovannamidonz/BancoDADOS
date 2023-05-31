@@ -1,0 +1,53 @@
+CREATE TABLE cadfun (CODFUN  NUMBER    ,
+                     NOME    VARCHAR2(40),
+                     DEPTO   VARCHAR2(2) ,
+                     FUNCAO  VARCHAR2(20),
+                     SALARIO NUMBER(8,2));
+-------------------------------------------------------------------------------   
+INSERT INTO cadfun VALUES (1,  'CARLOS ALBERTO',   '3', 'VENDEDOR'   , 1530.00);
+INSERT INTO cadfun VALUES (2,  'MARCOS HENRIQUE',  '2', 'GERENTE'    , 1985.75);   
+INSERT INTO cadfun VALUES (3,  'APARECIDA SILVA',  '3', 'SECRETARIO' , 1200.50);   
+INSERT INTO cadfun VALUES (4,  'SILVANA PACHECO',  '5', 'SUPERVISOR', 1599.51);   
+INSERT INTO cadfun VALUES (5,  'MARCELO SOUZA',    '3', 'ANALISTA'   , 2250.11);   
+INSERT INTO cadfun VALUES (6,  'MARISILVA NEVES',  '2', 'SECRETARIO' , 1200.50);   
+INSERT INTO cadfun VALUES (7,  'WILSON DE MACEDO', '3', 'PROGRAMADOR', 1050.00);   
+INSERT INTO cadfun VALUES (8,  'AUGUSTO SOUZA',    '3', 'PROGRAMADOR', 1050.00);   
+INSERT INTO cadfun VALUES (9,  'CARLOS BASTOS',    '5', 'VENDEDOR'   , 1530.00);
+INSERT INTO cadfun VALUES (10, 'SILVA SANTOS',     '3', 'SUPERVISOR' , 1599.51);
+INSERT INTO cadfun VALUES (11, 'ANA BASTOS',       '5', 'VENDEDOR'  , 1530.00);   
+INSERT INTO cadfun VALUES (12, 'PAULO DA SILVA',   '2', 'VENDEDOR'   , 1530.00);     
+-------------------------------------------------------------------------------
+SELECT TO_CHAR(AVG(SALARIO), '999999.99') FROM cadfun;
+SELECT CAST(AVG(salario) AS NUMBER(8,2)) FROM cadfun;
+
+SELECT COUNT(*) AS "Qtd" FROM cadfun
+WHERE funcao in ('PROGRAMADOR', 'SECRATRIO');
+
+SELECT funcao,COUNT(*) FROM cadfun GROUP BY funcao;
+
+SELECT MIN(salario) AS "Menor Salário",
+SELECT MAX(salario) AS "Maior Salário" FROM cadfun;
+
+SELECT SUM(salario) AS "Total dos SAlários " from cadfun;
+
+SELECT COUNT(DISTINCT funcao) FROM cadfun;
+
+SELECT DISTINCT funcao FROM cadfun;
+
+
+-- Algebra Relacional 
+-- principios do conjutos 
+-- protudo cartesiano [S]ELECT * FROM empregado, cargo;]
+-- uniao PARCIAL sem repetição as tabelas precisa ter a mesma estruturas [SELECT * FROM empregado UNION SELECT * FROM empregado2 ; ]
+-- uniao total com repetição  [SELECT * FROM empregado UNION ALL SELECT * FROM empregado2 ; ]
+-- interseção tem que pertecer nas duas tabelas [sELECT * FROM Empregado INTERSECT SELECT * FROM Empregado2; ]
+-- diferenciação so pertence a uma tabela [ SELECT * FRON Empregado MINUS SELECT * FROM Empregado2 ; ]
+-- JUNÇÃO === combinar dados [ SELECT <CAMPOS> FROM A INNER JOIN B ON A.COLUNA = B.COLUNA ]
+-- INNER JOIN 
+-- LEFT JOIN 
+-- RIGHT JOIN 
+-- FULL JOIN 
+-- CROSS JOIN 
+
+
+-- 
