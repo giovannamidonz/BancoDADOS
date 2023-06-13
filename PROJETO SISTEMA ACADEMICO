@@ -1,0 +1,217 @@
+CREATE TABLE departamento (
+    ID_departamento NUMBER NOT NULL PRIMARY KEY,
+    nome_departamento VARCHAR2(50));
+DESCRIBE departamento;
+
+CREATE TABLE assistVirtual(
+    ID_assistVirtual INTEGER PRIMARY KEY, 
+    nome_assistVirtual VARCHAR2(50) NOT NULL,
+    descricao_assistVirtual VARCHAR2(50) NOT NULL,
+    rercusos_tecno VARCHAR2(100) NOT NULL,
+    configuracoes VARCHAR2(100) NOT NULL );
+DESCRIBE assistVirtual;
+
+CREATE TABLE recurso(
+    ID_recurso NUMBER NOT NULL PRIMARY KEY,
+    nome_recurso VARCHAR2(50),
+    decricao_recurso VARCHAR2(50),
+    diponibilidade_recurso VARCHAR2(10));
+DESCRIBE recurso;
+
+CREATE TABLE trancamento(
+    ID_trancamento NUMBER NOT NULL PRIMARY KEY, 
+    periodo_trancamento VARCHAR2(50));
+DESCRIBE trancamento;
+
+CREATE TABLE avaliacao(
+    ID_avaliacao NUMBER NOT NULL PRIMARY KEY,
+    data_avalicao DATE NOT NULL,
+    tipo_avalicao VARCHAR2(50),
+    nota_avalicao NUMBER);
+DESCRIBE avaliacao;
+
+CREATE TABLE reprovacao(
+    ID_reprovacao NUMBER NOT NULL PRIMARY KEY,
+    numero_reprovacao NUMBER);
+DESCRIBE reprovacao;
+
+CREATE TABLE historico_Esc(
+    cod_historico NUMBER NOT NULL PRIMARY KEY,
+    frequencia VARCHAR2(30) NOT NULL,
+    periodo_realizado VARCHAR2(30) NOT NULL,
+    nota_final NUMBER NOT NULL);
+DESCRIBE historico_Esc;
+
+CREATE TABLE disciplina (
+    cod_disciplina NUMBER NOT NULL PRIMARY KEY,
+    nome_disciplina VARCHAR2(50) NOT NULL,
+    descricao VARCHAR2(50) NOT NULL,
+    carga_horaria VARCHAR2(6) NOT NULL,
+    ID_departamento NUMBER NOT NULL REFERENCES departamento(ID_departamento)
+);
+
+DESCRIBE disciplina;
+
+CREATE TABLE professor(
+	ID_professor NUMBER NOT NULL PRIMARY KEY,
+    nome_professor VARCHAR2(50) NOT NULL,
+    sobrenome_professor VARCHAR2(50) NOT NULL,
+    status VARCHAR2(50) NOT NULL,
+    ID_departamento NUMBER NOT NULL REFERENCES departamento(ID_departamento)
+);
+DESCRIBE professor;
+
+CREATE TABLE MINISTRAR (
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina),
+    ID_professor NUMBER NOT NULL REFERENCES professor(ID_professor)
+);
+
+DESCRIBE MINISTRAR;
+
+CREATE TABLE POSSUIR_RECURSO_DISCIPLINA (
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina),
+    ID_recurso NUMBER NOT NULL REFERENCES recurso(ID_recurso)
+);
+
+DESCRIBE POSSUIR_RECURSO_DISCIPLINA;
+
+CREATE TABLE curso(
+    cod_Curso NUMBER NOT NULL PRIMARY KEY,
+    nome_curso VARCHAR2(50) NOT NULL,
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina),
+    ID_departamento NUMBER NOT NULL REFERENCES departamento(ID_departamento)
+);
+
+DESCRIBE curso;
+
+CREATE TABLE turma(
+    cod_turma NUMBER NOT NULL PRIMARY KEY,
+    periodo_turma VARCHAR2(30) NOT NULL,
+    data_inicio_turma DATE NOT NULL,
+    data_final_turma DATE NOT NULL,
+    cod_Curso NUMBER NOT NULL REFERENCES curso(cod_Curso)
+);
+DESCRIBE turma;
+
+CREATE TABLE TURMA_POSSUI_RECURSO (
+    ID_recurso NUMBER NOT NULL REFERENCES recurso(ID_recurso),
+    cod_turma NUMBER NOT NULL REFERENCES turma(cod_turma)
+);
+
+DESCRIBE TURMA_POSSUI_RECURSO;
+
+CREATE TABLE matricula (ID_matricula NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    data_matricula DATE NOT NULL,
+    status_matricula VARCHAR2(100),
+    ID_trancamento INTEGER NOT NULL REFERENCES trancamento(ID_trancamento) );
+DESCRIBE matricula;
+
+CREATE TABLE CURSO_CONTEM_MATRICULA(
+    ID_matricula NUMBER NOT NULL REFERENCES matricula(ID_matricula),
+     cod_Curso NUMBER NOT NULL REFERENCES curso( cod_Curso)
+);
+DESCRIBE CURSO_CONTEM_MATRICULA;
+
+CREATE TABLE aluno (
+    ID_aluno INTEGER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    alu_nome VARCHAR2(50) NOT NULL,
+    alu_sobrenome VARCHAR2(50) NOT NULL,
+    alu_logadouro VARCHAR2(50) NOT NULL,
+    alu_numero VARCHAR2(10) NOT NULL,
+    alu_complemento VARCHAR2(50),
+    alu_cep CHAR(10) NOT NULL,
+    alu_bairro VARCHAR2(30) NOT NULL,
+    alu_cidade VARCHAR2(30) NOT NULL,
+    alu_estado CHAR(2) NOT NULL,
+    alu_telefone VARCHAR2(15) NOT NULL,
+    ID_assistVirtual INTEGER NOT NULL REFERENCES assistVirtual(ID_assistVirtual),
+    ID_trancamento NUMBER NOT NULL REFERENCES trancamento(ID_trancamento),
+    ID_matricula NUMBER NOT NULL REFERENCES matricula(ID_matricula),
+    cod_turma NUMBER NOT NULL REFERENCES turma(cod_turma)
+);
+
+DESCRIBE aluno;
+
+CREATE TABLE CURSA (
+    ID_aluno INTEGER NOT NULL REFERENCES aluno(ID_aluno),
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina) 
+);
+DESCRIBE CURSA;
+
+CREATE TABLE ALUNO_TEM_AVALIACAO (
+    ID_aluno INTEGER NOT NULL REFERENCES aluno(ID_aluno),
+    ID_avalicao NUMBER NOT NULL REFERENCES avaliacao(ID_avaliacao)
+);
+
+DESCRIBE ALUNO_TEM_AVALIACAO;
+
+CREATE TABLE ALUNO_TEM_REPROVACAO (
+    ID_aluno INTEGER NOT NULL REFERENCES aluno(ID_aluno),
+    ID_repovacao NUMBER NOT NULL REFERENCES reprovacao(ID_reprovacao)
+);
+
+DESCRIBE ALUNO_TEM_REPROVACAO;
+
+CREATE TABLE HISTO_REFERENTE_ALUNO(
+     ID_aluno INTEGER NOT NULL REFERENCES aluno(ID_aluno),
+     cod_historico NUMBER NOT NULL REFERENCES historico_Esc(cod_historico)
+);
+DESCRIBE HISTO_REFERENTE_ALUNO;
+
+CREATE TABLE HISTO_COMPOE_DISCIPLINA (
+    cod_historico NUMBER NOT NULL REFERENCES historico_Esc(cod_historico),
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina)
+);
+DESCRIBE HISTO_COMPOE_DISCIPLINA;
+
+CREATE TABLE AVALIA_INCLUIDA_DISCIP (
+   	cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina),
+	ID_avalicao NUMBER NOT NULL REFERENCES avaliacao(ID_avaliacao)
+);
+
+DESCRIBE AVALIA_INCLUIDA_DISCIP;
+
+CREATE TABLE REPROVA_INCLUIDA_DISCIP (
+    cod_disciplina NUMBER NOT NULL REFERENCES disciplina(cod_disciplina),
+	ID_repovacao NUMBER NOT NULL REFERENCES reprovacao(ID_reprovacao)
+);
+
+DESCRIBE REPROVA_INCLUIDA_DISCIP;
+
+CREATE TABLE interacao (
+    ID_interacao NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    data_interacao DATE NOT NULL,
+    hora_interacao TIMESTAMP NOT NULL,
+    conteudo_interacao VARCHAR2(1000) NOT NULL,
+    resultado_interacao VARCHAR2(1000) NOT NULL,
+    ID_assistVirtual INTEGER NOT NULL REFERENCES assistVirtual(ID_assistVirtual)
+);
+
+DESCRIBE interacao;
+
+CREATE TABLE pergunta_frequente (
+    ID_perguntFrenqu NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    Reps_correspondente VARCHAR2(1000) NOT NULL,
+    topico_pergFreque VARCHAR2(100) NOT NULL,
+    ID_assistVirtual INTEGER NOT NULL REFERENCES assistVirtual(ID_assistVirtual)
+);
+
+DESCRIBE pergunta_frequente;
+
+CREATE TABLE conhecimento(
+    ID_conhecimento NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    conteudo VARCHAR2(1000) NOT NULL,
+    topico_conhecimento VARCHAR2(100) NOT NULL,
+    contexto VARCHAR2(100) NOT NULL,
+    ID_assistVirtual INTEGER NOT NULL REFERENCES assistVirtual(ID_assistVirtual)
+);
+
+DESCRIBE conhecimento;
+
+CREATE TABLE CONECTAR_ALUNO_INTERACAO (
+    ID_interacao NUMBER NOT NULL REFERENCES interacao(ID_interacao),
+    ID_aluno INTEGER NOT NULL REFERENCES aluno(ID_aluno)
+);
+
+DESCRIBE CONECTAR_ALUNO_INTERACAO;
+
