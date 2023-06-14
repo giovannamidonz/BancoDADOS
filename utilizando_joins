@@ -1,0 +1,153 @@
+CREATE TABLE departamento (
+    codUnico NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    descricaoDepart VARCHAR2(50));
+DESCRIBE departamento;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE gradeHoraria(
+    IDgradeHR NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    anoPeriodo  NUMBER NOT NULL,
+    horaInicio TIMESTAMP NOT NULL,
+    horafinal TIMESTAMP NOT NULL);
+DESCRIBE gradeHoraria;
+---------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE assistVirtual(
+    IDassistVirtual INTEGER GENERATED AS IDENTITY NOT NULL PRIMARY KEY, 
+    nomeassistVirtual VARCHAR2(50) NOT NULL,
+    descricaoassistVirtual VARCHAR2(50) NOT NULL,
+    rercusostecno VARCHAR2(100) NOT NULL,
+    configuracoes VARCHAR2(100) NOT NULL );
+DESCRIBE assistVirtual;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE perguntaFrequente(
+    	IDpergFreq INTEGER GENERATED AS IDENTITY NOT NULL PRIMARY KEY, 
+     	respostaFreq VARCHAR2(1000) NOT NULL,
+    	topico VARCHAR2(50) NOT NULL
+    );
+DESCRIBE perguntaFrequente;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE conhecimento(
+   		IDconhecimento INTEGER GENERATED AS IDENTITY NOT NULL PRIMARY KEY, 
+     	conteudoConhec VARCHAR2(1000) NOT NULL,
+    	contextoConhec VARCHAR2(1000) NOT NULL );
+DESCRIBE conhecimento;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE historico_Esc(
+    IDhistorico NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    frequencia VARCHAR2(30) NOT NULL,
+    periodo_realizado VARCHAR2(30) NOT NULL,
+    nota_final NUMBER NOT NULL);
+DESCRIBE historico_Esc;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE disciplina (
+    IDdisciplina NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    nomeDisciplina VARCHAR2(50) NOT NULL,
+    descricaoDic VARCHAR2(50) NOT NULL,
+    cargahorariaDic VARCHAR2(6) NOT NULL,
+    codUnico NUMBER NOT NULL REFERENCES departamento(codUnico NUMBER)ON DELETE CASCADE
+   
+);
+
+DESCRIBE disciplina;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE interacao (
+    ID_interacao NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    dataInteracao DATE NOT NULL,
+    horaInteracao TIMESTAMP NOT NULL,
+    tipoInteracao VARCHAR2(100) NOT NULL,
+    conteudoInteracao VARCHAR2(1000) NOT NULL,
+    resultadoInteracao VARCHAR2(1000) NOT NULL,
+    IDassistVirtual INTEGER NOT NULL REFERENCES assistVirtual(IDassistVirtual)
+);
+
+DESCRIBE interacao;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE professor(
+	IDprofessor NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    nomeProfessor VARCHAR2(50) NOT NULL,
+    sobrenomeProfessor VARCHAR2(50) NOT NULL,
+    status VARCHAR2(50) NOT NULL,
+    codUnico NUMBER NOT NULL REFERENCES departamento(codUnico)
+);
+DESCRIBE professor;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE curso(
+    IDcurso NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    nomeCurso VARCHAR2(50) NOT NULL,
+    descricaoCurso VARCHAR2(50) NOT NULL,
+    cargaHorariaCurso NUMBER NOT NULL,
+    IDprofessor NUMBER NOT NULL REFERENCES professor(IDprofessor)
+);
+
+DESCRIBE curso;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE matricula (
+    ID_matricula NUMBER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    data_matricula DATE NOT NULL,
+    status_matricula VARCHAR2(100),
+    
+DESCRIBE matricula;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE turma(
+    id_turma NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    periodo_turma VARCHAR2(30) NOT NULL,
+    data_inicio_turma DATE NOT NULL,
+    data_final_turma DATE NOT NULL,
+    ID_matricula NUMBER NOT NULL REFERENCES matricula(ID_matricula),
+    IDcurso NUMBER NULL REFERENCES curso(IDcurso NUMBER)
+);
+DESCRIBE turma;
+---------------------------------------------------------------------------------------------------------------
+CREATE TABLE aluno (
+    ID_aluno INTEGER GENERATED AS IDENTITY START WITH 1000 INCREMENT BY 10 PRIMARY KEY,
+    alu_nome VARCHAR2(50) NOT NULL,
+    alu_sobrenome VARCHAR2(50) NOT NULL,
+    email VARCHAR2(50) UNIQUE,
+    alu_logadouro VARCHAR2(50) NOT NULL,
+    alu_numero VARCHAR2(10) NOT NULL,
+    alu_complemento VARCHAR2(50),
+    alu_cep CHAR(10) DEFAULT('50000000'),
+    alu_bairro VARCHAR2(30) NOT NULL,
+    alu_cidade VARCHAR2(30) NOT NULL,
+    alu_estado CHAR(2) NOT NULL,
+    Sx_Pessoal CHAR(1) NOT NULL CHECK(Sx_Pessoal='M' OR Sx_Pessoal='F'),
+    alu_telefone VARCHAR2(15) NOT NULL,
+    IDhistorico NUMBER NOT NULL REFERENCES historico_Esc(IDhistorico),
+    IDgradeHR NUMBER NOT NULL REFERENCES gradeHoraria(IDgradeHR),
+    IDcurso NUMBER NOT NULL REFERENCES curso(IDcurso)    
+);
+
+DESCRIBE aluno;
+--------------------------------------------------------------------------------
+CREATE TABLE historico_Esc(
+    cod_historico NUMBER GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
+    frequencia VARCHAR2(30) NOT NULL,
+    periodo_realizado VARCHAR2(30) NOT NULL,
+    nota_final NUMBER NOT NULL,
+    ID_matricula NUMBER NOT NULL REFERENCES matricula(ID_matricula));
+
+DESCRIBE historico_Esc;
+
+
+SELECT a.nome AS aluno_nome, c.nome AS curso_nome, SUM(h.nota_final) AS soma_notas
+FROM ALUNO a
+JOIN MATRICULA m ON a.matricula = m.matricula_aluno
+JOIN CURSO c ON m.ID_curso = c.ID_curso
+JOIN HISTORICO_ESC h ON h.ID_historico = m.ID_historico
+GROUP BY a.nome, c.nome;
+---SUM
+
+SELECT p.nome_professor, MIN(h.nota_final) AS nota_minima
+FROM PROFESSORES p
+JOIN MINISTRAR m ON p.ID_professor = m.ID_professor
+JOIN HISTORICO_ESC h ON h.ID_historico = m.ID_historico
+GROUP BY p.nome_professor;
+--min
+
+SELECT d.descricao_depart, COUNT(p.ID_pergFreq) AS total_perguntas
+FROM DEPARTAMENTO d
+JOIN DISCIPLINA dc ON d.descricao_depart = dc.descricao_depart
+JOIN PERGUNTA_FREQUENTES p ON dc.ID_disciplina = p.ID_disciplina
+GROUP BY d.descricao_depart;
+--count
+
